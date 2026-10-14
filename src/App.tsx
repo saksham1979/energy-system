@@ -53,15 +53,16 @@ const uploadedImages = [
   })),
 ];
 
+const baseUrl = import.meta.env.BASE_URL;
 const showcaseImages = uploadedImages.length
   ? uploadedImages
   : [
       {
-        src: "/assets/BG_homepage1.png",
+        src: `${baseUrl}BG_homepage1.png`,
         alt: "Energy System water purifier and industrial RO plant",
       },
       {
-        src: "/assets/water%20atm/water%20atm%20machine.jpg.png",
+        src: `${baseUrl}water%20atm/water%20atm%20machine.jpg.png`,
         alt: "Energy System community Water ATM installation",
       },
     ];
@@ -71,13 +72,15 @@ const heroMarker = '<div data-react-home-hero="true"></div>';
 function readPage(documentSource: string, isHome: boolean) {
   const parsed = new DOMParser().parseFromString(documentSource, "text/html");
   parsed.body.querySelectorAll("script").forEach((script) => script.remove());
-  let markup = parsed.body.innerHTML.replace(/(?:\.\.\/)?assets\//g, "/");
+  const addBaseToAssets = (markup: string) =>
+    markup.replace(/(?:\.\.\/)?assets\//g, baseUrl);
+  let markup = addBaseToAssets(parsed.body.innerHTML);
 
   if (isHome) {
     const hero = parsed.body.querySelector("section.hero");
     if (hero) {
       hero.outerHTML = heroMarker;
-      markup = parsed.body.innerHTML.replace(/(?:\.\.\/)?assets\//g, "/");
+      markup = addBaseToAssets(parsed.body.innerHTML);
     }
   }
 
@@ -123,7 +126,10 @@ function HomeHero() {
 }
 
 export default function App() {
-  const currentPath = window.location.pathname;
+  const pathname = window.location.pathname;
+  const currentPath = pathname.startsWith(baseUrl)
+    ? `/${pathname.slice(baseUrl.length)}`
+    : pathname;
   const isHome = currentPath === "/" || currentPath.endsWith("/index.html");
   const documentSource = routeDocuments[currentPath] ?? homeDocument;
   const page = useMemo(
