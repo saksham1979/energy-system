@@ -294,11 +294,12 @@ export function TiltedGridHero({
                       src={img.src}
                       alt={k === 0 ? (img.alt ?? "") : ""}
                       draggable={false}
-                      className="absolute top-0 max-w-none object-cover"
+                      className="absolute top-0 max-w-none object-contain"
                       style={{
                         left: u(-k * share),
                         width: u(aspectRatio),
                         height: u(1),
+                        backgroundColor: "#f8fbfc",
                       }}
                     />
                   ) : null}

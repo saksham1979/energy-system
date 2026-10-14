@@ -42,8 +42,23 @@ function imageLabel(filePath: string) {
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+const modelOrder = [
+  "domestic-ro-purifier",
+  "commercial-ro-25-lph-cabinet",
+  "commercial-ro-25-lph-open-frame",
+];
+
+const orderedModelFiles = Object.entries(modelFiles).sort(([left], [right]) => {
+  const rank = (path: string) => {
+    const name = path.split("/").pop()?.replace(/\.[^.]+$/, "") ?? "";
+    const index = modelOrder.indexOf(name);
+    return index < 0 ? modelOrder.length : index;
+  };
+  return rank(left) - rank(right);
+});
+
 const uploadedImages = [
-  ...Object.entries(modelFiles).map(([filePath, src]) => ({
+  ...orderedModelFiles.map(([filePath, src]) => ({
     src,
     alt: `${imageLabel(filePath)} water purifier model`,
   })),
@@ -72,6 +87,81 @@ const heroMarker = '<div data-react-home-hero="true"></div>';
 function readPage(documentSource: string, isHome: boolean) {
   const parsed = new DOMParser().parseFromString(documentSource, "text/html");
   parsed.body.querySelectorAll("script").forEach((script) => script.remove());
+
+  if (isHome) {
+    const solutionCards = parsed.body.querySelectorAll(
+      ".grid-3 article.card .img-placeholder",
+    );
+    const solutionImages = [
+      ["assets/ro-models/domestic-ro-purifier.jpg", "Domestic RO purifier"],
+      [
+        "assets/ro-models/commercial-ro-25-lph-cabinet.webp",
+        "25 LPH commercial RO system",
+      ],
+      ["assets/BG_homepage1.png", "Industrial RO plant and purification system"],
+      ["assets/water atm/water atm machine.jpg.png", "Community Water ATM"],
+    ];
+    solutionImages.forEach(([src, alt], index) => {
+      const placeholder = solutionCards[index];
+      if (!placeholder) return;
+      const image = parsed.createElement("img");
+      image.setAttribute("src", src);
+      image.setAttribute("alt", alt);
+      image.setAttribute("class", "category-product-image");
+      image.setAttribute("loading", "lazy");
+      placeholder.replaceWith(image);
+    });
+  }
+
+  if (documentSource === domesticDocument) {
+    const firstProductCard = parsed.body.querySelector(
+      ".grid-3 article.card .img-placeholder",
+    );
+    if (firstProductCard) {
+      const image = parsed.createElement("img");
+      image.setAttribute("src", "../assets/ro-models/domestic-ro-purifier.jpg");
+      image.setAttribute("alt", "Domestic RO water purifier model");
+      image.setAttribute("class", "product-card-image");
+      image.setAttribute("loading", "lazy");
+      firstProductCard.replaceWith(image);
+      const firstProductTitle = parsed.body.querySelector(
+        ".grid-3 article.card .card-title",
+      );
+      if (firstProductTitle) firstProductTitle.textContent = "Domestic RO Purifier";
+      const firstProductDescription = parsed.body.querySelector(
+        ".grid-3 article.card .card-desc",
+      );
+      if (firstProductDescription) {
+        firstProductDescription.textContent =
+          "Model shown. Domestic systems are available in capacities from 12 to 100 LPH; ask us to match a model to your household needs.";
+      }
+    }
+  }
+
+  if (documentSource === commercialDocument) {
+    const productGallery = parsed.body.querySelector(".product-gallery");
+    if (productGallery) {
+      productGallery.replaceChildren();
+      [
+        [
+          "../assets/ro-models/commercial-ro-25-lph-cabinet.webp",
+          "25 LPH commercial RO system in a cabinet frame",
+        ],
+        [
+          "../assets/ro-models/commercial-ro-25-lph-open-frame.jpg",
+          "25 LPH commercial RO system in an open frame",
+        ],
+      ].forEach(([src, alt]) => {
+        const image = parsed.createElement("img");
+        image.setAttribute("src", src);
+        image.setAttribute("alt", alt);
+        image.setAttribute("class", "product-gallery-image");
+        image.setAttribute("loading", "lazy");
+        productGallery.append(image);
+      });
+    }
+  }
+
   const addBaseToAssets = (markup: string) =>
     markup.replace(/(?:\.\.\/)?assets\//g, baseUrl);
   let markup = addBaseToAssets(parsed.body.innerHTML);
