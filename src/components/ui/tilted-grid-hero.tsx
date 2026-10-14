@@ -294,7 +294,7 @@ export function TiltedGridHero({
                       src={img.src}
                       alt={k === 0 ? (img.alt ?? "") : ""}
                       draggable={false}
-                      className="absolute top-0 max-w-none object-contain"
+                      className="absolute top-0 max-w-none object-cover"
                       style={{
                         left: u(-k * share),
                         width: u(aspectRatio),
