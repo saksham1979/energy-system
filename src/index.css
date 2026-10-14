@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "../css/style.css";
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #16323f;
+  --color-muted: #eaf4f8;
+  --color-muted-foreground: #5a707c;
+  --color-border: #dfe9ed;
+}
+
+.home-tilted-hero {
+  height: min(88vh, 780px);
+  min-height: 590px;
+  color: #fff;
+  background: #071f2b;
+  isolation: isolate;
+}
+
+.home-tilted-hero::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(4 31 43 / 78%), rgb(4 45 60 / 35%) 58%, rgb(4 31 43 / 20%));
+}
+
+.home-tilted-hero > div:last-child {
+  z-index: 1;
+}
+
+.home-hero-content {
+  text-shadow: 0 2px 20px rgb(0 0 0 / 30%);
+}
+
+.home-hero-content h1 {
+  color: #fff;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.02;
+}
+
+.home-hero-content p {
+  color: rgb(255 255 255 / 88%);
+}
+
+@media (max-width: 640px) {
+  .home-tilted-hero {
+    height: min(82vh, 720px);
+    min-height: 540px;
+  }
+}
