@@ -23,3 +23,7 @@ Use `.jpg`, `.jpeg`, `.png`, `.webp`, or `.avif` files and descriptive filenames
 ## Build
 
 Run `npm run build`; production files are written to `dist/`. The build also creates `dist/404.html` so the existing HTML-style page URLs continue working on GitHub Pages. The GitHub Pages base path is enabled automatically in GitHub Actions builds.
+
+## Publish on GitHub Pages
+
+The workflow in `.github/workflows/deploy-pages.yml` builds and deploys the site when changes are pushed to `main`. In the repository’s **Settings → Pages**, set **Build and deployment → Source** to **GitHub Actions**. After saving that setting, rerun the workflow from the repository’s **Actions** tab if the first run did not deploy.
