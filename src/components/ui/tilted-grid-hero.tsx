@@ -119,6 +119,8 @@ export type TiltedGridHeroProps = {
    * @default 80
    */
   curve?: number;
+  /** Bend each image across strips; disable to keep product photos undistorted. */
+  curveImages?: boolean;
   /** Width of the fade at each end, as a percentage of the hero's width. @default 12 */
   fade?: number;
   /** Content rendered above the band. */
@@ -134,6 +136,7 @@ export function TiltedGridHero({
   gap = 6,
   axis = 56,
   curve = 80,
+  curveImages = true,
   fade = 12,
   children,
   className,
@@ -247,7 +250,11 @@ export function TiltedGridHero({
           return (
             <div
               key={t}
-              className={cn(tile, "absolute")}
+              className={cn(
+                tile,
+                "absolute",
+                !curveImages && "overflow-hidden rounded-lg shadow-lg",
+              )}
               style={{
                 left: `calc(50% - ${u(aspectRatio / 2)})`,
                 top: `calc(${axis}% - ${u(0.5)})`,
@@ -266,44 +273,48 @@ export function TiltedGridHero({
                 });
               }}
             >
-              {Array.from({ length: SLICES }, (_, k) => (
-                <div
-                  key={k}
-                  className={cn(
-                    "absolute top-0 overflow-hidden bg-muted",
-                    k === 0 && "rounded-l-lg",
-                    k === SLICES - 1 && "rounded-r-lg",
-                  )}
-                  style={{
-                    // Every strip starts at the tile's centre and is turned
-                    // round the axis to its own place on the arc.
-                    left: u((aspectRatio - share) / 2),
-                    // A pixel wider than its share, so neighbouring facets
-                    // overlap and no hairline opens between them. The last
-                    // has no neighbour to cover.
-                    width:
-                      k === SLICES - 1 ? u(share) : `calc(${u(share)} + 1px)`,
-                    height: u(1),
-                    transform: turn(
-                      (aspectRatio / 2 - (k + 0.5) * share) * unit,
-                    ),
-                  }}
-                >
-                  {img ? (
-                    <img
-                      src={img.src}
-                      alt={k === 0 ? (img.alt ?? "") : ""}
-                      draggable={false}
-                      className="absolute top-0 max-w-none object-cover"
-                      style={{
-                        left: u(-k * share),
-                        width: u(aspectRatio),
-                        height: u(1),
-                      }}
-                    />
-                  ) : null}
-                </div>
-              ))}
+              {curveImages ? (
+                Array.from({ length: SLICES }, (_, k) => (
+                  <div
+                    key={k}
+                    className={cn(
+                      "absolute top-0 overflow-hidden bg-muted",
+                      k === 0 && "rounded-l-lg",
+                      k === SLICES - 1 && "rounded-r-lg",
+                    )}
+                    style={{
+                      left: u((aspectRatio - share) / 2),
+                      width:
+                        k === SLICES - 1 ? u(share) : `calc(${u(share)} + 1px)`,
+                      height: u(1),
+                      transform: turn(
+                        (aspectRatio / 2 - (k + 0.5) * share) * unit,
+                      ),
+                    }}
+                  >
+                    {img ? (
+                      <img
+                        src={img.src}
+                        alt={k === 0 ? (img.alt ?? "") : ""}
+                        draggable={false}
+                        className="absolute top-0 max-w-none object-cover"
+                        style={{
+                          left: u(-k * share),
+                          width: u(aspectRatio),
+                          height: u(1),
+                        }}
+                      />
+                    ) : null}
+                  </div>
+                ))
+              ) : img ? (
+                <img
+                  src={img.src}
+                  alt={img.alt ?? ""}
+                  draggable={false}
+                  className="h-full w-full bg-muted object-contain"
+                />
+              ) : null}
             </div>
           );
         })}

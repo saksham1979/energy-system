@@ -184,6 +184,7 @@ function HomeHero() {
       speed={4.5}
       tileHeight={32}
       aspectRatio={1.1}
+      curveImages={false}
       gap={5}
       axis={55}
       curve={72}
