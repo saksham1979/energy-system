@@ -183,6 +183,7 @@ function HomeHero() {
       images={showcaseImages}
       speed={4.5}
       tileHeight={32}
+      aspectRatio={1.1}
       gap={5}
       axis={55}
       curve={72}

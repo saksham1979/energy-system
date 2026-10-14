@@ -299,7 +299,6 @@ export function TiltedGridHero({
                         left: u(-k * share),
                         width: u(aspectRatio),
                         height: u(1),
-                        backgroundColor: "#f8fbfc",
                       }}
                     />
                   ) : null}
