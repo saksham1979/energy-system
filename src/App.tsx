@@ -9,6 +9,7 @@ import industrialDocument from "../legacy-site/pages/industrial-ro.html?raw";
 import servicesDocument from "../legacy-site/pages/services-amc.html?raw";
 import sparePartsDocument from "../legacy-site/pages/spare-parts.html?raw";
 import waterAtmDocument from "../legacy-site/pages/water-atm.html?raw";
+import homeWallpaper from "../assets/bg-homepage.webp";
 import { TiltedGridHero } from "@/components/ui/tilted-grid-hero";
 import { initPageInteractions } from "@/lib/page-interactions";
 
@@ -180,6 +181,7 @@ function readPage(documentSource: string, isHome: boolean) {
 function HomeHero() {
   return (
     <section className="home-tilted-hero relative w-full overflow-hidden">
+      <img className="home-wallpaper" src={homeWallpaper} alt="" aria-hidden="true" />
       <div className="home-hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 py-14 text-center sm:px-10">
         <span className="mb-5 rounded-full border border-white/40 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white sm:text-sm">
           Energy System · Water Purification Since 2009
