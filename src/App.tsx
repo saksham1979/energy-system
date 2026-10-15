@@ -163,6 +163,19 @@ function readPage(documentSource: string, isHome: boolean) {
     }
   }
 
+  if (documentSource === industrialDocument) {
+    const productGallery = parsed.body.querySelector(".product-gallery");
+    if (productGallery) {
+      productGallery.replaceChildren();
+      const image = parsed.createElement("img");
+      image.setAttribute("src", "../assets/ro-models/industrial-ro-1000-lph.webp");
+      image.setAttribute("alt", "1000 LPH stainless steel industrial RO plant with pretreatment vessels, pump, control panel and membrane housing");
+      image.setAttribute("class", "product-gallery-image industrial-product-image");
+      image.setAttribute("loading", "eager");
+      productGallery.append(image);
+    }
+  }
+
   const addBaseToAssets = (markup: string) =>
     markup.replace(/(?:\.\.\/)?assets\//g, baseUrl);
   let markup = addBaseToAssets(parsed.body.innerHTML);
