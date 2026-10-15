@@ -179,19 +179,7 @@ function readPage(documentSource: string, isHome: boolean) {
 
 function HomeHero() {
   return (
-    <TiltedGridHero
-      images={showcaseImages}
-      speed={4.5}
-      tileHeight={32}
-      aspectRatio={1.1}
-      curveImages={false}
-      gap={5}
-      axis={55}
-      curve={72}
-      fade={10}
-      className="home-tilted-hero relative w-full overflow-hidden"
-      aria-label="Rotating showcase of Energy System RO models and completed installations"
-    >
+    <section className="home-tilted-hero relative w-full overflow-hidden">
       <div className="home-hero-content relative z-10 flex h-full flex-col items-center justify-center px-6 py-14 text-center sm:px-10">
         <span className="mb-5 rounded-full border border-white/40 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white sm:text-sm">
           Energy System · Water Purification Since 2009
@@ -213,7 +201,34 @@ function HomeHero() {
           </a>
         </div>
       </div>
-    </TiltedGridHero>
+    </section>
+  );
+}
+
+function HomeProductShowcase() {
+  return (
+    <section className="home-showcase" aria-labelledby="home-showcase-title">
+      <div className="home-showcase-heading">
+        <span className="home-showcase-eyebrow">Made for your water needs</span>
+        <h2 id="home-showcase-title">Find the right RO system</h2>
+        <p>From compact home purifiers to high-capacity commercial plants, explore a few of our models.</p>
+        <a href="pages/commercial-ro.html" className="home-showcase-link">Explore our systems <span aria-hidden="true">→</span></a>
+      </div>
+      <TiltedGridHero
+        images={showcaseImages}
+        speed={3.2}
+        tileHeight={60}
+        aspectRatio={1.15}
+        curveImages={false}
+        gap={8}
+        axis={52}
+        curve={64}
+        fade={12}
+        className="home-product-carousel relative w-full overflow-hidden"
+        aria-label="Revolving gallery of Energy System RO models and completed installations"
+      />
+      <p className="home-showcase-note">A selection of domestic, commercial and project systems · Ask us about specifications and availability</p>
+    </section>
   );
 }
 
@@ -246,6 +261,7 @@ export default function App() {
     <>
       <div className="legacy-page" dangerouslySetInnerHTML={{ __html: beforeHero }} />
       <HomeHero />
+      <HomeProductShowcase />
       <div className="legacy-page" dangerouslySetInnerHTML={{ __html: afterHero }} />
     </>
   );
